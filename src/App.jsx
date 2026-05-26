@@ -100,6 +100,67 @@ export default function App() {
             console.error("데이터 로딩 실패:", error);
         }
     };
+    const handleAddBook = async (newBook) => {
+        try {
+            const res = await fetch(`${BASE_URL}${BOOKS}`,
+                {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(newBook)
+                }
+        );
+            const data = await res.json();
+            setBooks([data, ...books])
+        } catch(err) {
+            console.error(err);
+        }
+    }
+
+    const handleDelete = async (id) => {
+        try {
+            const res = await fetch(`${BASE_URL}${BOOKS}/${id}`,
+                {
+                    method: 'DELETE'
+                }
+            );
+            setBooks(books.filter(p => p.id !== id));
+        } catch(err) {
+            console.error(err);
+        }
+    };
+    const handleViewsPlus = async (id) => {
+        try {
+            const book = books.find(p => p.id === id);
+                const res = await fetch(`${BASE_URL}${BOOKS}/${id}`,
+            {
+                method:'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({views:book.views + 1})
+            }
+            )
+            const update = await res.json();
+            setBooks(books.map(p => p.id === id? update: p))
+        } catch(err) {
+            console.error(err);
+        }
+    };
+
+    const handleLikesToggle = async (id, isLiked) => {
+        try {
+            const book = books.find(p => p.id === id);
+                const res = await fetch(`${BASE_URL}${BOOKS}/${id}`,
+                {
+                    method:'PATCH',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({likes: isLiked ? book.likes + 1 : book.likes - 1})
+                }
+            )
+            const update = await res.json();
+            setBooks(books.map(p => p.id === id? update: p))
+        } catch(err) {
+            console.error(err);
+        }
+        };
 
     const handleCardClick = (id) => {
         setSelectedBookId(id);
