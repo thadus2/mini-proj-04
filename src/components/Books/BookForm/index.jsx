@@ -161,6 +161,7 @@ return (
                     <option value="미스터리/드라마">미스터리/드라마</option>
                     <option value="IT/과학">IT/과학</option>
                     <option value="인문/사회">인문/사회</option>
+                    <option value="판타지">판타지</option>
                 </select>
             </div>
             </div>
