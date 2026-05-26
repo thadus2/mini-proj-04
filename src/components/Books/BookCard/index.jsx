@@ -64,8 +64,8 @@ export default function BookCard(
                 <p className="summary">{summary || '요약 정보가 없습니다.'}</p>
 
                 <div className="card-footer">
-                    <span className="stat">👍 {likes ?? 0}</span>
-                    <span className="stat">😎 {views ?? 0}</span>
+                    <span className="stat">❤️ {likes ?? 0}</span>
+                    <span className="stat">👀 {views ?? 0}</span>
                 </div>
             </div>
         </button>
