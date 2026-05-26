@@ -5,7 +5,9 @@ import Footer from './layouts/Footer';
 import BookList from './components/Books/BookList';
 import BookForm from './components/Books/BookForm';
 import BookDetail from './components/Books/BookDetail';
-import { HashRouter, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import BookCreatePage from './pages/BookCreatePage';
+import BookEditPage from './pages/BookEditPage';
 
 export default function App() {
     const [posts, setPosts] = useState([]);
@@ -13,6 +15,7 @@ export default function App() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);   
     const [selectedIds, setSelectedIds] = useState([]);
+    const [message, setMessage] = useState('');
 
     const BASE_URL = 'http://localhost:3000';
     const BOOK_API = '/books';
@@ -26,27 +29,40 @@ export default function App() {
             const response = await fetch(`${BASE_URL}${BOOK_API}`);
             const data = await response.json();
             setPosts(data);
+            setLoading(false);
         } catch (error) {
             console.error("데이터 로딩 실패:", error);
+            setLoading(false);
         }
     };
     const handleAddBook = async (newBook) => {
         try {
-            const res = await fetch(`${BASE_URL}${BOOKS}`,
-                {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(newBook)
-                }
-        );
+            const res = await fetch(`${BASE_URL}${BOOK_API}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(newBook)
+            });
             const data = await res.json();
-            setPosts([data, ...books]);
-            setMessage('도서 등록이 완료되었습니다.');
-            navigate('/books');
+            setPosts([data, ...posts]);
+            alert('도서 등록이 완료되었습니다.'); 
+            // 🚨 navigate는 여기서 빼고, BookCreatePage 내부에서 처리하세요!
         } catch(err) {
             console.error(err);
         }
-    }
+    };
+    const handleDelete = async (id) => {
+        if (!window.confirm("정말 이 도서를 삭제합니까?")) return;
+        try {
+            await fetch(`${BASE_URL}${BOOK_API}/${id}`, { method: 'DELETE' });
+            // books ➡️ posts 로 수정 완료!
+            setPosts(posts.filter(p => p.id !== id));
+            alert('도서 삭제가 완료되었습니다.');
+            // 🚨 navigate 제거됨
+        } catch(err) {
+            console.error(err);
+            alert('도서 삭제에 실패했습니다.');
+        }
+    };
     const handleMultipleDelete = async () => {
         if (selectedIds.length === 0) {
             alert("삭제할 도서를 먼저 선택해 주세요!");
@@ -74,7 +90,7 @@ export default function App() {
     const handleUpdate = async (id, updatedBook) => {
         try {
             const res = await fetch(
-                `${BASE_URL}${BOOKS}/${id}`,
+                `${BASE_URL}${BOOK_API}/${id}`,
                 {
                     method: 'PUT',
                     headers: {
@@ -107,51 +123,47 @@ export default function App() {
         }
     };
 
-    const handleDelete = async (id) => {
+    const handleEdit = async (id, edited) => {
         try {
-            const res = await fetch(`${BASE_URL}${BOOKS}/${id}`,
-                {
-                    method: 'DELETE'
-                }
-            );
-            setBooks(books.filter(p => p.id !== id));
-            setMessage('도서 삭제가 완료되었습니다.');
-            navigate('/books');
+            const res = await fetch(`${BASE_URL}${BOOK_API}/${id}`, {
+                method: 'PATCH', // 혹은 백엔드 스펙에 따라 PUT
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(edited)
+            });
+            const update = await res.json();
+            // books ➡️ posts 로 수정 완료!
+            setPosts(posts.map(p => p.id === id ? update : p));
         } catch(err) {
             console.error(err);
-            // DELETE 실패 UI
-            setMessage('도서 삭제에 실패했습니다.');
         }
     };
     const handleViewsPlus = async (id) => {
         try {
-            const book = books.find(p => p.id === id);
-                const res = await fetch(`${BASE_URL}${BOOKS}/${id}`,
-                {
-                    method:'PATCH',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({views:book.views + 1})
-                }
-            )
+            // books ➡️ posts 로 수정 완료!
+            const book = posts.find(p => p.id === id);
+            const res = await fetch(`${BASE_URL}${BOOK_API}/${id}`, {
+                method:'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({views: book.views + 1})
+            });
             const update = await res.json();
-            setBooks(books.map(p => p.id === id? update: p))
+            setPosts(posts.map(p => p.id === id ? update : p));
         } catch(err) {
             console.error(err);
         }
     };
 
-    const handleLikesToggle = async (id, isLiked) => {
+const handleLikesToggle = async (id, isLiked) => {
         try {
-            const book = books.find(p => p.id === id);
-                const res = await fetch(`${BASE_URL}${BOOKS}/${id}`,
-                {
-                    method:'PATCH',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({likes: isLiked ? book.likes + 1 : book.likes - 1})
-                }
-            )
+            // books ➡️ posts 로 수정 완료!
+            const book = posts.find(p => p.id === id);
+            const res = await fetch(`${BASE_URL}${BOOK_API}/${id}`, {
+                method:'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({likes: isLiked ? book.likes + 1 : book.likes - 1})
+            });
             const update = await res.json();
-            setBooks(books.map(p => p.id === id? update: p))
+            setPosts(posts.map(p => p.id === id ? update : p));
         } catch(err) {
             console.error(err);
         }
@@ -164,6 +176,13 @@ export default function App() {
             setSelectedIds([...selectedIds, id]);
         }
     };
+
+    if (loading)
+        return (
+            <p>
+                로딩중 입니다...
+            </p>
+        );
 
     return(
         <HashRouter>
@@ -188,7 +207,7 @@ export default function App() {
                                 >
                                     삭제
                                 </button>
-                                <Link to="/books/create">
+                                <Link to="/create">
                                     <button className="btn-register">
                                         도서 등록
                                     </button>
@@ -207,6 +226,16 @@ export default function App() {
                 <Route path="/books/:id" element={
                         <BookDetail posts={posts} /> 
                 } />
+                <Route 
+                    path="/create" 
+                    element={<BookCreatePage onAdd={handleAddBook} 
+                />} />
+                <Route 
+                    path='/books/:id/edit'
+                    element={<BookEditPage 
+                    onEdit={handleEdit} 
+                    posts={posts}/>} 
+                />
             </Routes>
             <Footer />
         </HashRouter>

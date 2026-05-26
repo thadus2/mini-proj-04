@@ -19,8 +19,8 @@ export default function Navigator() {
           📚 도서 목록
         </li>
         <li 
-            className={`nav-item ${location.pathname === '/post' ? 'active' : ''}`}
-            onClick={() => navigator('/post')}
+            className={`nav-item ${location.pathname === '/create' ? 'active' : ''}`}
+            onClick={() => navigator('/create')}
         >
           ➕ 도서 등록
         </li>
