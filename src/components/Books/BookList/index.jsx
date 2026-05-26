@@ -1,18 +1,24 @@
 import BookCard from "../BookCard/index.jsx";
-import BookItem from "../BookItem/index.jsx";
 import './style.css';
-// BookList.jsx
-export default function BookList({posts, onCardClick}) {
+
+export default function BookList({ posts = [], onCardClick }) {
+    if (!posts || posts.length === 0) {
+        return (
+            <div className="book-list-container">
+                <p>등록된 도서가 없습니다.</p>
+            </div>
+        );
+    }
 
     return (
-        <div className='book-list-container'>
-            {posts.map(p => 
+        <div className="book-list-container">
+            {posts.map((book) => (
                 <BookCard
-                key={p.id}
-                {...p}
-                onCardClick={onCardClick}
+                    key={book.id}
+                    {...book}
+                    onCardClick={onCardClick}
                 />
-            )}
+            ))}
         </div>
     );
 }

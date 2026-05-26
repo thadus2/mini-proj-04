@@ -1,11 +1,16 @@
 // Header.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, CircleUserRound } from 'lucide-react';
 import './style.css'; 
 import Navigator from '../Navigator';
 
-function Header({ onChangePage, currentPage }) {
-return (
+function Header({ onChangePage, currentPage, onSearchKeyword }) {
+  const [currentKeyword, setCurrentKeyword] = useState('');
+  const handleSearchKeyword = (e) => {
+    e.preventDefault();
+    onSearchKeyword(currentKeyword);
+  }
+  return (
     <header className="header">
 
       {/* 왼쪽 */}
@@ -25,10 +30,14 @@ return (
         <div className="search-box">
           <span>🔍</span>
 
-          <input
-            type="text"
-            placeholder="검색"
-          />
+          <form onSubmit={handleSearchKeyword}> 
+            <input 
+              type='text'
+              placeholder='검색'
+              value={currentKeyword}
+              onChange={(e) => setCurrentKeyword(e.target.value)}
+            />
+          </form>
         </div>
 
         <button className="profile-button">
