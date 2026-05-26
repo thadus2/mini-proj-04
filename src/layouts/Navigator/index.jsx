@@ -21,12 +21,12 @@ export default function Navigator({ onChangePage, currentPage }) {
           ➕ 도서 등록
         </li>
 
-        <li 
+        {/* <li 
             className="nav-item"
             onClick={() => onChangePage('aiThumbnailGen')}
         >
           🖼️ AI 표지 생성
-        </li>
+        </li> */}
 
       </ul>
 

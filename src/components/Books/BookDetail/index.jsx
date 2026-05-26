@@ -1,28 +1,50 @@
 // BookDetail.jsx
 import React from 'react';
 import defaultImg from '../../../assets/images/default-background.png';
+import FavoriteIcon from '../../../assets/images/favorite-icon.png';
+import ViewIcon from '../../../assets/images/view-icon.png';
+import './style.css'; // (또는 BookDetail.css) 경로에 맞게 임포트 해주세요!
+
 
 export default function BookDetail({ book, onBack }) {
     return (
-        <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-            <button onClick={onBack} style={{ marginBottom: '20px' }}>← 목록으로 돌아가기</button>
-            
-            <h2>{book.title}</h2>
-            <p><strong>작가:</strong> {book.author} | <strong>장르:</strong> {book.genre}</p>
-            
-            <img src={book.coverImageUrl ? book.coverImageUrl : defaultImg} alt="커버" style={{ maxWidth: '300px', display: 'block', margin: '20px 0' }} />
-            
-            <div style={{ marginTop: '20px', lineHeight: '1.6' }}>
-                <h4>요약</h4>
-                <p>{book.summary}</p>
-                <hr />
-                <h4>본문 내용</h4>
-                <p>{book.content}</p> {/* 👈 리스트엔 없던 진짜 상세 내용 출력! */}
-            </div>
-            
-            <div style={{ marginTop: '20px', color: '#666' }}>
-                <span>👍 {book.likes} </span>
-                <span>👀 {book.views}</span>
+        <div className="book-detail-wrapper">
+            <button className="go-list-button" onClick={onBack}>
+                목록으로 돌아가기
+            </button>
+            <div className="book-detail-layout">
+                <div className="book-left-col">
+                    <img 
+                        className="cover-image" 
+                        src={book.coverImageUrl ? book.coverImageUrl : defaultImg} 
+                        alt="커버" 
+                    />
+                </div>
+                <div className="book-right-col">
+                    <div className="book-header">
+                        <h2 className="book-title">{book.title}</h2>
+                        <p className="book-meta">
+                            <strong>작가:</strong>{book.author}<strong>장르:</strong> {book.genre}
+                            <span>
+                                <img className='book-stat-icon' src={FavoriteIcon}/>{book.likes}
+                            </span>
+
+                            <span>                                
+                                <img className='book-stat-icon' src={ViewIcon}/>{book.views}
+                            </span>
+                        </p>
+                    </div>
+                    <hr className="divider" />
+                    <div className="book-section">
+                        <h4>요약</h4>
+                        <p className="book-summary">{book.summary}</p>
+                    </div>
+                    <hr className="divider" />
+                    <div className="book-section">
+                        <h4>본문 내용</h4>
+                        <p className="book-content">{book.content}</p>
+                    </div>
+                </div>
             </div>
         </div>
     );
