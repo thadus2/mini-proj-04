@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './style.css';
 import imageCompression from 'browser-image-compression';
 
-function BookForm({onAdd, defaultBook, onEdit}) {
+export default function BookForm({onAdd, defaultBook, onEdit}) {
     const [title, setTitle] = useState(defaultBook?.title || '');
     const [author, setAuthor] = useState(defaultBook?.author || '');
     const [genre, setGenre] = useState(defaultBook?.genre || '');
@@ -161,6 +161,3 @@ return (
     </div>
   );
 }
-
-
-export default BookForm

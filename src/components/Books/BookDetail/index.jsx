@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import defaultImg from '../../../assets/images/default-background.png';
 import FavoriteIcon from '../../../assets/images/favorite-icon.png';
 import ViewIcon from '../../../assets/images/view-icon.png';
 import './style.css';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-export default function BookDetail({ posts }) {
+export default function BookDetail({ posts, onViewsPlus }) {
     const location = useLocation();
     const navigate = useNavigate();
 
     const { id } = useParams();
 
     const post = posts.find(p => p.id === id)
+    
+    useEffect(() => {
+        if (post) {
+        onViewsPlus(post.id);
+        }
+    }, [id]);
 
     if (!post) {
         return (

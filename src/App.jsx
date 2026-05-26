@@ -155,7 +155,6 @@ export default function App() {
 
 const handleLikesToggle = async (id, isLiked) => {
         try {
-            // books ➡️ posts 로 수정 완료!
             const book = posts.find(p => p.id === id);
             const res = await fetch(`${BASE_URL}${BOOK_API}/${id}`, {
                 method:'PATCH',
@@ -199,7 +198,6 @@ const handleLikesToggle = async (id, isLiked) => {
                 <Route path="/books" element={
                     <>
                         <div className="book-list-header">
-                            <h2>Book List</h2>
                             <div className="book-list-actions">
                                 <button 
                                     className="btn-delete"
@@ -224,7 +222,10 @@ const handleLikesToggle = async (id, isLiked) => {
                     </>
                 } />
                 <Route path="/books/:id" element={
-                        <BookDetail posts={posts} /> 
+                        <BookDetail 
+                            posts={posts}
+                            onViewsPlus={handleViewsPlus}
+                        /> 
                 } />
                 <Route 
                     path="/create" 
