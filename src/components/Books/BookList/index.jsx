@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import BookCard from "../BookCard/index.jsx";
 import './style.css';
 
-export default function BookList({ posts = [] }) {
+export default function BookList({ posts = [], onCardClick, selectedIds = [], onSelectToggle }) {
     const navigate = useNavigate();
 
     if (!posts || posts.length === 0) {
@@ -20,6 +20,8 @@ export default function BookList({ posts = [] }) {
                     key={book.id}
                     {...book}
                     onCardClick={() => navigate(`/books/${book.id}`)}
+                    isChecked={selectedIds.includes(book.id)}
+                    onSelectToggle={onSelectToggle}
                 />
             ))}
         </div>

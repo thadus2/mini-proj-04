@@ -13,6 +13,8 @@ export default function BookCard(
             views,
             coverImageUrl,
             onCardClick,
+            isChecked,
+            onSelectToggle,
         }
     ) {
     const handleClick = () => {
@@ -23,6 +25,30 @@ export default function BookCard(
 
     return (
         <button className="book-card" onClick={handleClick}>
+            <input 
+                type="checkbox" 
+                className="book-select-checkbox"
+                checked={isChecked}
+                
+                onChange={(e) => {
+                    e.stopPropagation();
+                    onSelectToggle(id);  
+                }}
+    
+                onClick={(e) => {
+                    e.stopPropagation(); 
+                }}
+                style={{
+                    position: 'absolute',
+                    top: '15px',
+                    right: '15px',
+                    zIndex: 10,
+                    width: '20px',
+                    height: '20px',
+                    cursor: 'pointer'
+                }}
+            />
+
             <div className="image-wrapper">
                 <span className="genre-badge">{genre || '장르 없음'}</span>
 
