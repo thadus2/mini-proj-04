@@ -91,7 +91,6 @@ export default function App() {
     const selectedBook = posts.find(p => p.id === selectedBookId);
 
     return(
-          
         <div>
             <Header 
                 onChangePage={setCurrentPage}

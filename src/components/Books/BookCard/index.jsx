@@ -1,18 +1,30 @@
-// BookCard
 import React from 'react';
 import defaultImg from '../../../assets/images/default-background.png';
+import './style.css';
 
 export default function BookCard(props) {
-
     return (
-        <button onClick={() => props.onCardClick(props.id)}>
-            <h3>제목: {props.title}</h3>
-            <p>장르: {props.genre}</p>
-            <img src={props.coverImageUrl} style={{'width':'100%', 'height':'auto'}}/>
-            <p>요약 내용: {props.summary}</p>
-            <p>작성자: {props.author}</p>
-            <span>👍👍 {props.likes}</span>
-            <span>😎😎 {props.views}</span>
+        <button className="book-card" onClick={() => props.onCardClick(props.id)}>
+            
+            <div className="image-wrapper">
+                <span className="genre-badge">{props.genre}</span>
+                <img 
+                    src={props.coverImageUrl ? props.coverImageUrl : defaultImg} 
+                    alt={props.title} 
+                />
+            </div>
+
+            <div className="content-box">
+                <h3 className="title">{props.title}</h3>
+                <p className="author">{props.author}</p>
+                <p className="summary">{props.summary}</p>
+                
+                <div className="card-footer">
+                    <span className="stat">👍 {props.likes}</span>
+                    <span className="stat">😎 {props.views}</span>
+                </div>
+            </div>
+            
         </button>
     );
 }
