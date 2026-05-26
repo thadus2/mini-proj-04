@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import defaultImg from '../../../assets/images/default-background.png';
 import FavoriteIcon from '../../../assets/images/favorite-icon.png';
 import ViewIcon from '../../../assets/images/view-icon.png';
 import './style.css';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-export default function BookDetail({ posts, onViewsPlus }) {
+export default function BookDetail({ posts, onViewsPlus, onDelete }) {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -13,16 +13,32 @@ export default function BookDetail({ posts, onViewsPlus }) {
 
     const post = posts.find(p => p.id === id)
     
+    const [isLiked, setIsLiked] = useState(false);
+
     useEffect(() => {
         if (post) {
         onViewsPlus(post.id);
         }
     }, [id]);
 
+    const handleLikeClick = () => {
+        const nextState = !isLiked;
+        onLikesToggle(post.id, nextState);
+        setIsLiked(nextState);
+    };
+
+  const handleClickDelete = async(bookId) => {
+    if (window.confirm("정말 이 도서를 삭제하시겠습니까?")) {
+          await onDelete(bookId);
+          navigate('/books');  
+        }
+
+  }
+    
     if (!post) {
         return (
             <div className="book-detail-wrapper">
-                <button className="go-list-button" onClick={() => navigate('/books')}>
+                <button className="book-detail-button" onClick={() => navigate('/books')}>
                     목록으로 돌아가기
                 </button>
                 <p>도서 정보를 불러올 수 없습니다.</p>
@@ -32,10 +48,18 @@ export default function BookDetail({ posts, onViewsPlus }) {
 
     return (
         <div className="book-detail-wrapper">
-            <button className="go-list-button" onClick={() => navigate('/books')}>
-                목록으로 돌아가기
-            </button>
-
+            <div className='book-actions-button'>
+                <button className="book-list-button" onClick={() => navigate('/books')}>
+                    목록으로 돌아가기
+                </button>
+                <button className="book-edit-button" onClick={() => navigate(`/books/${id}/edit`)}>
+                    <span>수정</span>
+                </button>
+                <span> | </span>
+                <button className="book-delete-button" onClick={() => handleClickDelete(id)}>
+                    <span>삭제</span>
+                </button>
+            </div>
             <div className="book-detail-layout">
                 <div className="book-left-col">
                     <img

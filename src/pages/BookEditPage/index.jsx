@@ -3,11 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import './style.css';
 import BookForm from '../../components/Books/BookForm';
-function BookEditPage({ books , onEdit }) {
+export default function BookEditPage({ posts, onEdit }) {
     
     const { id } = useParams();
     const navigate = useNavigate();
-    const defaultbook = books.find(p => String(p.id) === String(id));
+    const defaultbook = posts.find(p => p.id === id);
 
     return (
         <div className="book-create-page">
@@ -16,5 +16,3 @@ function BookEditPage({ books , onEdit }) {
         </div>
     );
 }
-
-export default BookEditPage;

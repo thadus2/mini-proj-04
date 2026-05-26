@@ -16,6 +16,8 @@ export default function App() {
     const [error, setError] = useState(null);   
     const [selectedIds, setSelectedIds] = useState([]);
     const [message, setMessage] = useState('');
+    const [selectedGenre, setSelectedGenre] = useState(''); // 선택된 장르 상태
+    const [sortBy, setSortBy] = useState('latest');
 
     const BASE_URL = 'http://localhost:3000';
     const BOOK_API = '/books';
@@ -45,13 +47,12 @@ export default function App() {
             const data = await res.json();
             setPosts([data, ...posts]);
             alert('도서 등록이 완료되었습니다.'); 
-            // 🚨 navigate는 여기서 빼고, BookCreatePage 내부에서 처리하세요!
         } catch(err) {
             console.error(err);
         }
     };
+
     const handleDelete = async (id) => {
-        if (!window.confirm("정말 이 도서를 삭제합니까?")) return;
         try {
             await fetch(`${BASE_URL}${BOOK_API}/${id}`, { method: 'DELETE' });
             // books ➡️ posts 로 수정 완료!
@@ -198,26 +199,65 @@ const handleLikesToggle = async (id, isLiked) => {
                 <Route path="/books" element={
                     <>
                         <div className="book-list-header">
+                            <div className="book-list-filters">
+                                {/* 장르 셀렉터 */}
+                                <select 
+                                    className="filter-select"
+                                    value={selectedGenre}
+                                    onChange={(e) => setSelectedGenre(e.target.value)}
+                                >
+                                    <option value="">전체 장르</option>
+                                    <option value="소설/문학">소설/문학</option>
+                                    <option value="에세이/시">에세이/시</option>
+                                    <option value="미스터리/SF">미스터리/SF</option>
+                                    <option value="미스터리/드라마">미스터리/드라마</option>
+                                    <option value="IT/과학">IT/과학</option>
+                                    <option value="인문/사회">인문/사회</option>
+                                </select>
+
+                                {/* 정렬 셀렉터 */}
+                                <select 
+                                    className="filter-select"
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                >
+                                    <option value="latest">최신순</option>
+                                    <option value="likes">좋아요순 ❤️</option>
+                                    <option value="views">조회수순 👀</option>
+                                </select>
+                            </div>
                             <div className="book-list-actions">
                                 <button 
-                                    className="btn-delete"
+                                    className="book-delete-btn"
                                     onClick={handleMultipleDelete} 
                                 >
                                     삭제
                                 </button>
                                 <Link to="/create">
-                                    <button className="btn-register">
+                                    <button className="book-register-btn">
                                         도서 등록
                                     </button>
                                 </Link>
                             </div>
                         </div>
                         <BookList 
-                            posts={posts.filter(post => 
-                                post.title && post.title.includes(searchKeyword)
-                            )} 
-                            selectedIds={selectedIds}          // 선택된 도서 ID 목록
-                            onSelectToggle={handleSelectToggle} // 체크박스 토글 함수
+                            // 🎯 [핵심] 검색어 필터 ➡️ 장르 필터 ➡️ 정렬 순으로 원본 데이터를 실시간 가공해서 자식에게 던집니다.
+                            posts={posts
+                                .filter(post => 
+                                    post.title && post.title.includes(searchKeyword)
+                                )
+                                .filter(post => 
+                                    selectedGenre === '' || post.genre === selectedGenre
+                                )
+                                .sort((a, b) => {
+                                    if (sortBy === 'likes') return (b.likes || 0) - (a.likes || 0);
+                                    if (sortBy === 'views') return (b.views || 0) - (a.views || 0);
+                                    // 최신순(latest)은 고유 ID 역순 또는 생성일 기준 (여기서는 ID 문자열 매칭이 아닐 경우 단순 역순 정렬 예시)
+                                    return String(b.id).localeCompare(String(a.id)); 
+                                })
+                            } 
+                            selectedIds={selectedIds}          
+                            onSelectToggle={handleSelectToggle} 
                         />
                     </>
                 } />
@@ -225,6 +265,7 @@ const handleLikesToggle = async (id, isLiked) => {
                         <BookDetail 
                             posts={posts}
                             onViewsPlus={handleViewsPlus}
+                            onDelete={handleDelete}
                         /> 
                 } />
                 <Route 

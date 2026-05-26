@@ -8,7 +8,7 @@
   /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); */
 }
 
-.go-list-button {
+/* .book-list-button {
   display: block;
   margin-right: auto;
   margin-bottom: 25px;
@@ -23,8 +23,65 @@
   margin-bottom: 25px;
   transition: color 0.2s ease;
 }
-.go-list-button:hover {
+.book-list-button:hover {
   color: #1a73e8;
+} */
+
+/* 1. 전체를 우측 끝으로 밀고 정렬 맞추기 */
+.book-actions-button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px; /* 버튼과 파이프(|) 사이의 간격 */
+    width: 100%;
+    margin-bottom: 15px; /* 타이틀(실리콘밸리의 유령들)과의 간격 */
+}
+.book-list-button {
+    display: block;
+    margin-right: auto;          /* 오른쪽 여백을 무한대로 줘서 혼자 왼쪽 끝으로 붙게 만듦 */
+    margin-bottom: 25px;
+}
+/* 2. 기본 html 버튼의 딱딱한 테두리 및 배경 없애기 (선택사항이지만 추천!) */
+.book-list-button,
+.book-edit-button,
+.book-delete-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 15px;             /* 글자 크기 통일 */
+    font-weight: 600;            /* 글자 두께 통일 (600이 딱 깔끔합니다) */
+    transition: color 0.2s ease; /* 호버 시 부드러운 색상 전환 */
+}
+.book-list-button,
+.book-edit-button,
+.book-delete-button {
+    color: #4a5568;
+}
+.book-list-button:hover,
+.book-edit-button:hover {
+    color: #1a202c; /* 마우스 올리면 선명하게 강조 */
+}
+
+.book-delete-button:hover {
+    color: #9b2c2c;
+}
+
+/* 4. 우측 수정|삭제 버튼들을 감싸는 컨테이너 정렬 및 구분선 */
+.book-actions-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.book-actions-button > span {
+    color: #cbd5e0; /* 구분선(|) 색상도 부드럽게 매칭 */
+    font-size: 14px;
+    user-select: none;
+}
+/* 4. 가운데 구분선(|) 색상 연하게 조절 */
+.book-actions-button {
+    color: #ccc;
 }
 
 .book-detail-layout {

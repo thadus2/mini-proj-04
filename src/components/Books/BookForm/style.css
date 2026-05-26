@@ -27,6 +27,31 @@
   align-items: flex-start; /* 좌우 요소들의 상단 높이를 맞춤 */
 }
 
+.input-error {
+    border: 1.5px solid #ff4d4d !important;
+    background-color: #fff5f5 !important;
+}
+.input-error::placeholder {
+    color: #ff4d4d !important;
+    font-weight: 500;
+}
+.genre-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #4a5568;
+    outline: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    height: 40px; /* 기존 인풋 창 높이와 맞춤 */
+}
+.genre-select:focus {
+    border-color: #3182ce;
+}
+
 /* 📸 좌측 구역: 이미지 업로드 & 미리보기 구역 */
 .image-upload-section {
   display: flex;

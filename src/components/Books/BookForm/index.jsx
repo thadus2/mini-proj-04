@@ -14,6 +14,12 @@ export default function BookForm({onAdd, defaultBook, onEdit}) {
     const [likes, setLikes] = useState(defaultBook?.likes || 0);
     const [views, setViews] = useState(defaultBook?.views || 0);
 
+    const [errors, setErrors] = useState({
+        title: false,
+        author: false,
+        content: false
+    });
+
     const navigator = useNavigate();
     
     const handleImageChange = async (e) => {
@@ -42,8 +48,20 @@ export default function BookForm({onAdd, defaultBook, onEdit}) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!title.trim() || !author.trim() || !author.trim())
+        const newErrors = {
+            title: !title.trim(),
+            author: !author.trim(),
+            content: !content.trim() || content.trim().length < 5 
+        };
+
+        setErrors(newErrors);
+
+        if (newErrors.title || newErrors.author || newErrors.content) {
+            if (newErrors.content) {
+                setContent(''); // 5자 미만일 때 placeholder를 보여주기 위해 본문을 비움
+            }
             return;
+        }
 
         const newBook = {
             title: title,
@@ -67,13 +85,12 @@ export default function BookForm({onAdd, defaultBook, onEdit}) {
             setSummary('');
             setPublish('');
             setCoverImageUrl('');
+            navigator('/books');
         }
         else {
             onEdit(defaultBook.id, newBook)
-            navigator(`/book/${defaultBook.id}`);
+            navigator(`/books/${defaultBook.id}`);
         }
-
-
     }
 
 return (
@@ -104,28 +121,47 @@ return (
         {/* 입력 폼 구역 */}
         <div className="form-inputs-container">
             <div className="input-group">
-            <label>도서 제목 *</label>
-            <input 
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder='제목을 입력하세요'/>
+                <label>도서 제목 *</label>
+                <input 
+                    className={errors.title ? 'input-error' : ''}
+                    value={title}
+                    onChange={(e) => {
+                        setTitle(e.target.value);
+                        if (errors.title) setErrors({ ...errors, title: false });
+                    }}
+                    placeholder={errors.title ? '도서 제목은 필수 입력 항목입니다.' : '제목을 입력하세요'}
+                />
             </div>
 
             <div className="input-row">
             <div className="input-group">
                 <label>작성자 *</label>
                 <input 
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                placeholder='저자 이름'/>
+                    className={errors.author ? 'input-error' : ''}
+                    value={author}
+                    onChange={(e) => {
+                        setAuthor(e.target.value);
+                        if (errors.author) setErrors({ ...errors, author: false });
+                    }}
+                    placeholder={errors.author ? '작성자는 필수 입력 항목입니다.' : '저자 이름'}
+                />
             </div>
             
             <div className="input-group">
                 <label>장르</label>
-                <input 
-                value={genre}
-                onChange={(e) => setGenre(e.target.value)}
-                placeholder='예: 소설, 에세이'/>
+                <select 
+                    className="genre-select"
+                    value={genre}
+                    onChange={(e) => setGenre(e.target.value)}
+                >
+                    <option value="">장르 선택</option>
+                    <option value="소설/문학">소설/문학</option>
+                    <option value="에세이/시">에세이/시</option>
+                    <option value="미스터리/SF">미스터리/SF</option>
+                    <option value="미스터리/드라마">미스터리/드라마</option>
+                    <option value="IT/과학">IT/과학</option>
+                    <option value="인문/사회">인문/사회</option>
+                </select>
             </div>
             </div>
 
@@ -138,12 +174,17 @@ return (
             </div>
 
             <div className="input-group">
-            <label>본문 내용 *</label>
+            <label>본문 내용 * (5글자 이상)</label>
             <textarea 
+                className={errors.content ? 'input-error' : ''}
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder='도서의 상세 내용을 적어주세요'
-                rows="6"/>
+                onChange={(e) => {
+                    setContent(e.target.value);
+                    if (errors.content) setErrors({ ...errors, content: false });
+                }}
+                placeholder={errors.content ? '본문 내용은 필수 입력 항목입니다. (5글자 이상)' : '도서의 상세 내용을 적어주세요'}
+                rows="6"
+            />
             </div>
 
             <div className="input-group">

@@ -8,7 +8,6 @@ function BookCreatePage({ onAdd }) {
 
   const handleFormSubmit = async (newBook) => {
     await onAdd(newBook);
-    navigate('/');
   };
 
   return (
