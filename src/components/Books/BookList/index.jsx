@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import BookCard from "../BookCard/index.jsx";
 import './style.css';
 
-export default function BookList({ posts = [], onCardClick }) {
+export default function BookList({ posts = [] }) {
+    const navigate = useNavigate();
+
     if (!posts || posts.length === 0) {
         return (
             <div className="book-list-container">
@@ -16,7 +19,7 @@ export default function BookList({ posts = [], onCardClick }) {
                 <BookCard
                     key={book.id}
                     {...book}
-                    onCardClick={onCardClick}
+                    onCardClick={() => navigate(`/books/${book.id}`)}
                 />
             ))}
         </div>

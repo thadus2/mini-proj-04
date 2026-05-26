@@ -3,9 +3,13 @@ import React, { useState } from 'react';
 import { Search, CircleUserRound } from 'lucide-react';
 import './style.css'; 
 import Navigator from '../Navigator';
+import { useNavigate } from 'react-router-dom';
 
-function Header({ onChangePage, currentPage, onSearchKeyword }) {
+function Header({ onSearchKeyword }) {
   const [currentKeyword, setCurrentKeyword] = useState('');
+
+  const navigate = useNavigate();
+
   const handleSearchKeyword = (e) => {
     e.preventDefault();
     onSearchKeyword(currentKeyword);
@@ -14,15 +18,12 @@ function Header({ onChangePage, currentPage, onSearchKeyword }) {
     <header className="header">
 
       {/* 왼쪽 */}
-      <div className="header-left" onClick={() => onChangePage('main')}>
+      <div className="header-left" onClick={() => navigate('/')}>
         <h1>도서 관리 시스템</h1>
       </div>
 
       {/* 가운데 네비게이션 */}
-      <Navigator 
-        onChangePage={onChangePage}
-        currentPage={currentPage}
-      />
+      <Navigator />
 
       {/* 오른쪽 */}
       <div className="header-right">

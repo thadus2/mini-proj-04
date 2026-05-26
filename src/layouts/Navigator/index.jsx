@@ -1,35 +1,30 @@
 //Navigator.jsx
+import { useLocation, useNavigate } from "react-router-dom";
 import "./style.css";
 
-export default function Navigator({ onChangePage, currentPage }) {
+export default function Navigator() {
+  const location = useLocation();
+
+  const navigator = useNavigate();
+
   return (
     <nav className="navigator">
 
       <ul className="nav-menu">
 
         <li 
-            className={`nav-item ${currentPage === 'bookList' ? 'active' : ''}`}
-            onClick={() => onChangePage('bookList')}
+            className={`nav-item ${location.pathname === '/books' ? 'active' : ''}`}
+            onClick={() => navigator('/books')}
         >
           📚 도서 목록
         </li>
-
         <li 
-            className="nav-item"
-            onClick={() => onChangePage('bookForm')}
+            className={`nav-item ${location.pathname === '/post' ? 'active' : ''}`}
+            onClick={() => navigator('/post')}
         >
           ➕ 도서 등록
         </li>
-
-        {/* <li 
-            className="nav-item"
-            onClick={() => onChangePage('aiThumbnailGen')}
-        >
-          🖼️ AI 표지 생성
-        </li> */}
-
       </ul>
-
     </nav>
   );
 }

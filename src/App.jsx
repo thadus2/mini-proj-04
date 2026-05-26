@@ -5,6 +5,7 @@ import Footer from './layouts/Footer';
 import BookList from './components/Books/BookList';
 import BookForm from './components/Books/BookForm';
 import BookDetail from './components/Books/BookDetail';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 export default function App() {
     // const [posts, setPosts] = useState([      
@@ -80,8 +81,8 @@ export default function App() {
     //     }
     // ]);
     const [posts, setPosts] = useState([]);
-    const [currentPage, setCurrentPage] = useState('main');
-    const [selectedBookId, setSelectedBookId] = useState(null);
+    // const [currentPage, setCurrentPage] = useState('main');
+    // const [selectedBookId, setSelectedBookId] = useState(null);
     const [searchKeyword, setSearchKeyword] = useState('');
 
     const BASE_URL = 'http://localhost:3000';
@@ -110,7 +111,7 @@ export default function App() {
                 }
         );
             const data = await res.json();
-            setBooks([data, ...books])
+            setPosts([data, ...books])
         } catch(err) {
             console.error(err);
         }
@@ -132,11 +133,11 @@ export default function App() {
         try {
             const book = books.find(p => p.id === id);
                 const res = await fetch(`${BASE_URL}${BOOKS}/${id}`,
-            {
-                method:'PATCH',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({views:book.views + 1})
-            }
+                {
+                    method:'PATCH',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({views:book.views + 1})
+                }
             )
             const update = await res.json();
             setBooks(books.map(p => p.id === id? update: p))
@@ -162,22 +163,22 @@ export default function App() {
         }
         };
 
-    const handleCardClick = (id) => {
-        setSelectedBookId(id);
-        setCurrentPage('bookDetail');
-    }
+    // const handleCardClick = (id) => {
+    //     setSelectedBookId(id);
+    //     setCurrentPage('bookDetail');
+    // }
 
-    const selectedBook = posts.find(p => p.id === selectedBookId);
+    // const selectedBook = posts.find(p => p.id === selectedBookId);
 
     return(
-        <div>
+        <HashRouter>
             <Header 
-                onChangePage={setCurrentPage}
-                currentPage={currentPage}
+                // onChangePage={setCurrentPage}
+                // currentPage={currentPage}
                 onSearchKeyword={setSearchKeyword}
             />
-            {/* <BookForm /> */}
-            {currentPage === 'main' &&
+            {/* 상태기반 페이지 변경에서 Router로 변경 */}
+            {/* {currentPage === 'main' &&
                 <>
                     <h1>
                         도서 관리 시스템에 오신 것을 환영합니다!
@@ -195,9 +196,24 @@ export default function App() {
             )}
             {currentPage === 'bookDetail' && selectedBook && (
                 <BookDetail book={selectedBook} onBack={() => setCurrentPage('bookList')} />
-            )}
-            
+            )} */}
+            <Routes>
+                <Route path='/' element={
+                    <>
+                        <h1>도서 관리 시스템에 오신 것을 환영합니다!</h1>
+                        <p>이 시스템을 사용하여 도서를 등록하고 관리할 수 있습니다.</p>
+                    </>
+                } />
+                <Route path="/books" element={
+                        <BookList 
+                            posts={posts.filter(post => post.title.includes(searchKeyword))} 
+                        />
+                } />
+                <Route path="/books/:id" element={
+                        <BookDetail posts={posts} /> 
+                } />
+            </Routes>
             <Footer />
-        </div>
+        </HashRouter>
     );
 }
