@@ -46,6 +46,11 @@
   display: flex;
   justify-content: center;
 }
+.header-logo {
+  width : 48px;
+  height: auto;
+  margin-top: 6px;
+}
 
 /* 오른쪽 영역 */
 .header-right {

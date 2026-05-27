@@ -5,13 +5,13 @@ import ViewIcon from '../../../assets/images/view-icon.png';
 import './style.css';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-export default function BookDetail({ posts, onViewsPlus, onDelete }) {
+export default function BookDetail({ posts, onViewsPlus, onDelete, onLikesToggle }) {
     const location = useLocation();
     const navigate = useNavigate();
 
     const { id } = useParams();
 
-    const post = posts.find(p => p.id === id)
+    const post = posts.find(p => String(p.id) === String(id))
     
     const [isLiked, setIsLiked] = useState(false);
 
@@ -69,7 +69,7 @@ export default function BookDetail({ posts, onViewsPlus, onDelete }) {
                         src={post.coverImageUrl ? post.coverImageUrl : defaultImg}
                         alt={post.title || '커버'}
                     />
-                    <button onClick={handleAiGen}>AI 표지 만들기</button>
+                    <button className='book-detail-aigen-btn' onClick={handleAiGen}>AI 표지 만들기</button>
                 </div>
 
                 <div className="book-right-col">
@@ -80,14 +80,14 @@ export default function BookDetail({ posts, onViewsPlus, onDelete }) {
                             <strong>작가:</strong> {post.author || '작가 없음'}
                             <strong> 장르:</strong> {post.genre || '장르 없음'}
 
-                            <span>
+                            <button onClick={handleLikeClick}>
                                 <img
                                     className="book-stat-icon"
                                     src={FavoriteIcon}
-                                    alt="좋아요"
+                                    alt="좋아요"                                    
                                 />
                                 {post.likes ?? 0}
-                            </span>
+                            </button>
 
                             <span>
                                 <img

@@ -4,6 +4,7 @@ import { Search, CircleUserRound } from 'lucide-react';
 import './style.css'; 
 import Navigator from '../Navigator';
 import { useNavigate } from 'react-router-dom';
+import LogoIcon from '../assets/image/logo.png';
 
 function Header({ onSearchKeyword }) {
   const [currentKeyword, setCurrentKeyword] = useState('');
@@ -17,15 +18,13 @@ function Header({ onSearchKeyword }) {
   return (
     <header className="header">
 
-      {/* 왼쪽 */}
       <div className="header-left" onClick={() => navigate('/')}>
-        <h1>도서 관리 시스템</h1>
+        <img className='header-logo' src={LogoIcon} />
+        <h1>AI Books</h1>
       </div>
 
-      {/* 가운데 네비게이션 */}
       <Navigator />
 
-      {/* 오른쪽 */}
       <div className="header-right">
 
         <div className="search-box">

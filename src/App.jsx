@@ -8,7 +8,7 @@ import BookDetail from './components/Books/BookDetail';
 import { HashRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import BookCreatePage from './pages/BookCreatePage';
 import BookEditPage from './pages/BookEditPage';
-import AiGen from './pages/AICoverGenPage';
+import AICoverGenPage from './pages/AICoverGenPage';
 
 export default function App() {
     const [posts, setPosts] = useState([]);
@@ -268,6 +268,7 @@ const handleLikesToggle = async (id, isLiked) => {
                             posts={posts}
                             onViewsPlus={handleViewsPlus}
                             onDelete={handleDelete}
+                            onLikesToggle={handleLikesToggle}
                         /> 
                 } />
                 <Route 
@@ -282,7 +283,7 @@ const handleLikesToggle = async (id, isLiked) => {
                 />
                 <Route 
                     path='/books/:id/ai-gen'
-                    element={<AiGen
+                    element={<AICoverGenPage
                         posts={posts}
                         onEdit={handleEdit}
                     />}
