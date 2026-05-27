@@ -43,7 +43,32 @@ export default function AiGenForm({ posts, onEdit }) {
             </div>
         );
     }
+    const compressDataUrl = (dataUrl, maxWidth = 500, quality = 0.6) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
 
+            img.onload = () => {
+                const ratio = Math.min(maxWidth / img.width, 1);
+                const canvas = document.createElement('canvas');
+
+                canvas.width = img.width * ratio;
+                canvas.height = img.height * ratio;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+
+                resolve(compressedDataUrl);
+            };
+
+            img.onerror = () => {
+                reject(new Error('이미지 압축에 실패했습니다.'));
+            };
+
+            img.src = dataUrl;
+        });
+    };
     const handleGeneratePrompt = async () => {
         setIsGenerating(true);
         setGenerateFail(false);
@@ -141,7 +166,9 @@ export default function AiGenForm({ posts, onEdit }) {
             const base64RawData = resData.data[0].b64_json;
             const dataUrl = `data:image/png;base64,${base64RawData}`;
             
-            setImageUrl(dataUrl); 
+            const compressedDataUrl = await compressDataUrl(dataUrl, 500, 0.6);
+
+            setImageUrl(compressedDataUrl);
 
         } catch (err) {
             console.error("이미지 생성 중 최종 에러 발생:", err);

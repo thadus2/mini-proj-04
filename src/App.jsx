@@ -9,6 +9,7 @@ import { HashRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import BookCreatePage from './pages/BookCreatePage';
 import BookEditPage from './pages/BookEditPage';
 import AICoverGenPage from './pages/AICoverGenPage';
+import MainPage from './pages/MainPage';
 
 export default function App() {
     const [posts, setPosts] = useState([]);
@@ -192,10 +193,7 @@ const handleLikesToggle = async (id, isLiked) => {
             />
             <Routes>
                 <Route path='/' element={
-                    <>
-                        <h1>도서 관리 시스템에 오신 것을 환영합니다!</h1>
-                        <p>이 시스템을 사용하여 도서를 등록하고 관리할 수 있습니다.</p>
-                    </>
+                    <MainPage />
                 } />
                 <Route path="/books" element={
                     <>
