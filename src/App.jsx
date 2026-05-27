@@ -8,6 +8,7 @@ import BookDetail from './components/Books/BookDetail';
 import { HashRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import BookCreatePage from './pages/BookCreatePage';
 import BookEditPage from './pages/BookEditPage';
+import AiGen from './pages/AICoverGenPage';
 
 export default function App() {
     const [posts, setPosts] = useState([]);
@@ -107,8 +108,8 @@ export default function App() {
 
             const data = await res.json();
 
-            setBooks(
-                books.map(book =>
+            setPosts(
+                posts.map(book =>
                     book.id === id ? data : book
                 )
             );
@@ -278,6 +279,13 @@ const handleLikesToggle = async (id, isLiked) => {
                     element={<BookEditPage 
                     onEdit={handleEdit} 
                     posts={posts}/>} 
+                />
+                <Route 
+                    path='/books/:id/ai-gen'
+                    element={<AiGen
+                        posts={posts}
+                        onEdit={handleEdit}
+                    />}
                 />
             </Routes>
             <Footer />

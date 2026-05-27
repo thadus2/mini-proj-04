@@ -32,7 +32,9 @@ export default function BookDetail({ posts, onViewsPlus, onDelete }) {
           await onDelete(bookId);
           navigate('/books');  
         }
-
+  }
+  const handleAiGen = () => {
+        navigate(`/books/${id}/ai-gen`);
   }
     
     if (!post) {
@@ -67,6 +69,7 @@ export default function BookDetail({ posts, onViewsPlus, onDelete }) {
                         src={post.coverImageUrl ? post.coverImageUrl : defaultImg}
                         alt={post.title || '커버'}
                     />
+                    <button onClick={handleAiGen}>AI 표지 만들기</button>
                 </div>
 
                 <div className="book-right-col">
