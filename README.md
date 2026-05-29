@@ -14,7 +14,8 @@ README.md
 단순히 글을 쓰고 공개하는 것을 넘어, **작가의 이야기와 시선이 그대로 표지에 닿을 수 있도록 설계**되었습니다. 전문 디자이너나 표지 기획자가 없어도, AI 이미지 생성 기술이 창작자의 가장 가까운 조력자가 되어 글의 감성을 시각적인 표지로 직관적으로 구현해 냅니다.
 
 **플랫폼 예시**
-![alt text](image.png)
+<img width="1479" height="1252" alt="image" src="https://github.com/user-attachments/assets/2eecc649-fa81-434e-8721-b58a0f7f5b14" />
+
 -------------------------------------------------------------------------------------------------------------------------
 
 ## 👨‍👩‍👧‍👦 2. 팀원 소개 및 역할 분담 
@@ -54,59 +55,61 @@ README.md
 
 * **기본 기능** 
 - 도서 등록(C)
-![alt text](image-1.png)
+<img width="1486" height="1326" alt="image-1" src="https://github.com/user-attachments/assets/a2ee1543-e4b2-4adc-9d20-5c8c439a0c7c" />
 - 조회(R)
 
 - 수정(U)
-![alt text](image-2.png)
+<img width="1502" height="1075" alt="image-2" src="https://github.com/user-attachments/assets/df115eb9-a026-48e5-a377-277faeebe062" />
 - 삭제(D)
-![alt text](image-3.png)
+<img width="1403" height="753" alt="image-3" src="https://github.com/user-attachments/assets/67ca3056-1029-4b21-bb93-8596a1fd33b0" />
 
 * **심화 기능**
 - OpenAI API를 활용한 도서 표지 이미지 자동 생성 기능 
-![alt text](image-6.png)
+<img width="1504" height="923" alt="image-6" src="https://github.com/user-attachments/assets/330dba51-c0a3-4776-acf4-e283e02b175f" />
 - 장르별 필터링(도서를 장르별로 필터링 해서 확인할 수 있습니다.)
-![alt text](image-4.png)
+<img width="96" height="185" alt="image-4" src="https://github.com/user-attachments/assets/624f4c94-c217-427d-bf14-1ce39367dcd8" />
 - 정렬 기능(도서를 좋아요, 조회수 순으로 정렬 가능합니다.)
-![alt text](image-5.png)
+<img width="84" height="86" alt="image-5" src="https://github.com/user-attachments/assets/eac0cb05-9a5b-419c-ab39-21230ab89f53" />
 -------------------------------------------------------------------------------------------------------------------------
 
-## 💾 6. 도서 데이터 구조 
+## 💾 6. 도서 데이터 구조
 
+`db.json` 파일의 전체적인 데이터 스키마 구조입니다. 가상 API 서버(json-server)와 통신 시 아래와 같은 정형화된 JSON 포맷을 활용합니다.
 
-* **db.json** 파일의 구조를 시각적으로 적어둡니다.
-
+```json
 {
-	"books": [
-		{
-		"id": 1,
-		"title": "별빛  아래의  서점",
-		"author": "홍길동",
-		"genre": "미스터리/드라마",
-		"content": "...",
-		"likes": 45,
-		"views": 13,
-		"summary": "이 글은 ~",
-		"publish": "kt출판사",
-		"coverImageUrl": "", 
-		"createdAt": "2026-04-24T09:00:00.000Z", 
-		"updatedAt": "2026-04-24T09:00:00.000Z"
-		} 
-	]
+  "books": [
+    {
+      "id": 1,
+      "title": "별빛 아래의 서점",
+      "author": "홍길동",
+      "genre": "미스터리/드라마",
+      "content": "줄거리 요약 내용이 이곳에 저장됩니다...",
+      "likes": 45,
+      "views": 13,
+      "summary": "책 목록 페이지에 노출될 핵심 3문장 요약 정보입니다.",
+      "publish": "kt출판사",
+      "coverImageUrl": "[https://openai.api/generated-image-url.png](https://openai.api/generated-image-url.png)",
+      "createdAt": "2026-04-24T09:00:00.000Z",
+      "updatedAt": "2026-04-24T09:00:00.000Z"
+    }
+  ]
 }
+```
 
-- id : 등록 아이디
-- title : 책 제목
-- author : 저자
-- genre : 장르
-- content : 줄거리 요약
-- likes: 좋아요 수
-- views : 방문자 수
-- summary : 책 목록이 보이는 페이지에 나올 3문장 요약문(일단 사용자가 적음)
-- publish : 출판사 명
-- coverImageUrl : AI 생성 표지
-- createdAt : 도서 등록일(DB에 도서를 등록한 날짜)
-- updatedAt : 수정일.(DB에 등록된 도서를 수정한 날짜)
+### 🔍 필드 상세 설명 (Field Details)
+* **`id`** (Number) : 도서 고유 등록 아이디 (자동 생성)
+* **`title`** (String) : 도서 제목
+* **`author`** (String) : 저자명
+* **`genre`** (String) : 도서 장르 (예: 미스터리/드라마, 소설 등)
+* **`content`** (String) : 전체 줄거리 및 본문 내용
+* **`likes`** (Number) : 좋아요 수 (추천 수)
+* **`views`** (Number) : 도서 상세 페이지 조회수 (방문자 수)
+* **`summary`** (String) : 메인 목록 화면에 노출될 3문장 이내의 요약문
+* **`publish`** (String) : 출판사명
+* **`coverImageUrl`** (String) : OpenAI DALL-E API를 통해 자동 생성된 고유 표지 이미지 URL
+* **`createdAt`** (String) : 최초 도서 등록 일시 (ISO 8601 포맷)
+* **`updatedAt`** (String) : 최근 도서 정보 수정 일시 (ISO 8601 포맷)
 
 -------------------------------------------------------------------------------------------------------------------------
 
@@ -160,4 +163,4 @@ git fetch --all
 # 로컬 상태를 원격 main 브랜치의 최신 상태로 강제 초기화
 git reset --hard origin/main
 ```
-> ⚠️ **주의 사항:** `git reset --hard` 명령어를 실행하면 현재 로컬에서 수정 중이던 미커밋 파일이 모두 유실될 수 있습니다. 중요한 작업 내역이 있다면 실행 전에 반드시 별도로 백업해 두시기 바랍니다.<img width="1479" height="1252" alt="image" src="https://github.com/user-attachments/assets/2eecc649-fa81-434e-8721-b58a0f7f5b14" />
+> ⚠️ **주의 사항:** `git reset --hard` 명령어를 실행하면 현재 로컬에서 수정 중이던 미커밋 파일이 모두 유실될 수 있습니다. 중요한 작업 내역이 있다면 실행 전에 반드시 별도로 백업해 두시기 바랍니다.
