@@ -56,10 +56,10 @@ README.md
 * **기본 기능** 
 - 도서 등록(C)
 <img width="1486" height="1326" alt="image-1" src="https://github.com/user-attachments/assets/a2ee1543-e4b2-4adc-9d20-5c8c439a0c7c" />
-- 조회(R)
 
 - 수정(U)
 <img width="1502" height="1075" alt="image-2" src="https://github.com/user-attachments/assets/df115eb9-a026-48e5-a377-277faeebe062" />
+
 - 삭제(D)
 <img width="1403" height="753" alt="image-3" src="https://github.com/user-attachments/assets/67ca3056-1029-4b21-bb93-8596a1fd33b0" />
 
@@ -67,9 +67,12 @@ README.md
 - OpenAI API를 활용한 도서 표지 이미지 자동 생성 기능 
 <img width="1504" height="923" alt="image-6" src="https://github.com/user-attachments/assets/330dba51-c0a3-4776-acf4-e283e02b175f" />
 - 장르별 필터링(도서를 장르별로 필터링 해서 확인할 수 있습니다.)
+  
 <img width="96" height="185" alt="image-4" src="https://github.com/user-attachments/assets/624f4c94-c217-427d-bf14-1ce39367dcd8" />
+
 - 정렬 기능(도서를 좋아요, 조회수 순으로 정렬 가능합니다.)
-<img width="84" height="86" alt="image-5" src="https://github.com/user-attachments/assets/eac0cb05-9a5b-419c-ab39-21230ab89f53" />
+  
+- <img width="84" height="86" alt="image-5" src="https://github.com/user-attachments/assets/eac0cb05-9a5b-419c-ab39-21230ab89f53" />
 -------------------------------------------------------------------------------------------------------------------------
 
 ## 💾 6. 도서 데이터 구조
